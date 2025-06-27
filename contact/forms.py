@@ -1,6 +1,7 @@
 from .models import Contact
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
 
 
 class ContactForm(forms.ModelForm):
@@ -30,3 +31,7 @@ class ContactForm(forms.ModelForm):
             self.add_error('first_name',
                            ValidationError("Não use ABC nesse campo", code='invalid'))
         return first_name
+
+
+class RegisterForm(UserCreationForm):
+    ...
