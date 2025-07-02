@@ -7,6 +7,20 @@ from django.contrib.auth import password_validation
 
 
 class ContactForm(forms.ModelForm):
+    first_name = forms.CharField(
+        min_length=2,
+        max_length=30,
+        required=True,
+        help_text='Required.',
+        error_messages={
+            'min_length': 'Please, add more than 2 letters.'
+        }
+    )
+    last_name = forms.CharField(
+        min_length=2,
+        max_length=30,
+    )
+
     picture = forms.ImageField(
         required=False,
         widget=forms.FileInput(
@@ -28,23 +42,40 @@ class ContactForm(forms.ModelForm):
             'picture',
         )
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        if first_name == 'ABC':
-            self.add_error('first_name',
-                           ValidationError("Não use ABC nesse campo", code='invalid'))
-        return first_name
-
 
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField(
+        min_length=2,
+        max_length=30,
         required=True,
-        min_length=3,
+        help_text='Required.',
+        error_messages={
+            'min_length': 'Please, add more than 2 letters.'
+        }
     )
     last_name = forms.CharField(
+        min_length=2,
+        max_length=30,
         required=True,
-        min_length=3,
+        help_text='Required.'
     )
+
+    password1 = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=password_validation.password_validators_help_text_html(),
+        required=False,
+    )
+
+    password2 = forms.CharField(
+        label="Password 2",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text='Use the same password as before.',
+        required=False,
+    )
+
     email = forms.EmailField()
 
     class Meta:
